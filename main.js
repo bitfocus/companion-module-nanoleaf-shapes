@@ -3,6 +3,7 @@ const UpgradeScripts = require('./upgrades')
 const UpdateActions = require('./actions')
 const UpdateFeedbacks = require('./feedbacks')
 const UpdateVariableDefinitions = require('./variables')
+const { ServiceDiscovery } = require('nanoleaf-client')
 
 class ModuleInstance extends InstanceBase {
 	constructor(internal) {
@@ -13,6 +14,16 @@ class ModuleInstance extends InstanceBase {
 		this.config = config
 
 		this.updateStatus(InstanceStatus.Ok)
+
+		// TODO getEffectList
+		var effects = [
+			"Rainbow",
+			"Flames",
+			"Sunset",
+			"Water"
+		]
+		this.CHOICES_EFFECTS = []
+		effects.forEach((e) => {this.CHOICES_EFFECTS.push({id: e, label:e})})
 
 		this.updateActions() // export actions
 		this.updateFeedbacks() // export feedbacks
@@ -29,20 +40,26 @@ class ModuleInstance extends InstanceBase {
 
 	// Return config fields for web config
 	getConfigFields() {
+		console.log(1)
+		this.serviceDiscovery = new ServiceDiscovery()
+		console.log(2)
+		var devices
+		this.serviceDiscovery.discoverNanoleaf().then(d => {devices=d})
+		console.log(3)
+		// TODO
+		this.CHOICES_DEVICES = [
+			{ id: '1', label: 'Device 1' },
+			{ id: '2', label: 'The other device' }
+		]
+		console.log(4)
 		return [
 			{
-				type: 'textinput',
-				id: 'host',
-				label: 'Target IP',
-				width: 8,
-				regex: Regex.IP,
-			},
-			{
-				type: 'textinput',
-				id: 'port',
-				label: 'Target Port',
-				width: 4,
-				regex: Regex.PORT,
+				type: 'dropdown',
+				id: 'device',
+				label: 'Nanoleaf device',
+				width: 12,
+				default: '1', 
+				choices: this.CHOICES_DEVICES,
 			},
 		]
 	}
