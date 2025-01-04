@@ -6,9 +6,21 @@ module.exports = function (self) {
 			options: [],
 			callback: async (event) => {
 				self.client.identify().then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
+				})
+			},
+		},
+		togglePower: {
+			name: 'Toggle power',
+			description: 'Toggle the power of the device',
+			options: [],
+			callback: async (event) => {
+				self.client.power(! self.deviceInfo.state.on.value).then(res => {
+					self.log('debug', JSON.stringify(res))
+				}).catch(err => {
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -18,9 +30,9 @@ module.exports = function (self) {
 			options: [],
 			callback: async (event) => {
 				self.client.turnOn().then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -30,9 +42,9 @@ module.exports = function (self) {
 			options: [],
 			callback: async (event) => {
 				self.client.turnOff().then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -43,17 +55,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'saturation',
 					label: 'Saturation',
-					min: 0,
-					max: 255,
+					min: self.MIN_SATURATION,
+					max: self.MAX_SATURATION,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
 				self.client.setSaturation(event.options.saturation).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -64,17 +76,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'saturation',
 					label: 'Change saturation by',
-					min: -255,
-					max: 255,
+					min: -self.MAX_SATURATION,
+					max: self.MAX_SATURATION,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
 				self.client.incrementSaturation(event.options.saturation).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -85,17 +97,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'brightness',
 					label: 'Brightness',
-					min: 0,
-					max: 255,
+					min: self.MIN_BRIGHTNESS,
+					max: self.MAX_BRIGHTNESS,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
 				self.client.setBrightness(event.options.brightness).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -106,30 +118,30 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'brightness',
 					label: 'Change Brightness by',
-					min: -255,
-					max: 255,
+					min: -self.MAX_BRIGHTNESS,
+					max: self.MAX_BRIGHTNESS,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
-				self.client.incrementBrightness(event.options.brightness).then(res => {
-					console.log(res)
+				self.client.increaseBrightness(event.options.brightness).then(res => {
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
 		setDurationBrightness: {
-			name: 'Set Duration Brightness',
+			name: 'Fade to Brightness',
 			description: 'Sets brightness value temporarily',
 			options: [
 				{
 					type: 'number',
 					id: 'brightness',
 					label: 'Brightness',
-					min: 0,
-					max: 255,
+					min: self.MIN_BRIGHTNESS,
+					max: self.MAX_BRIGHTNESS,
 					default: 10,
 					step: 1,
 				},
@@ -143,10 +155,10 @@ module.exports = function (self) {
 				},
 			],
 			callback: async (event) => {
-				self.client.setDurationBrightness(event.options.duration, event.options.brightness).then(res => {
-					console.log(res)
+				self.client.setDurationBrightness(event.options.brightness, event.options.duration).then(res => {
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -158,17 +170,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'hue',
 					label: 'Hue',
-					min: 0,
-					max: 255,
+					min: self.MIN_HUE,
+					max: self.MAX_HUE,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
 				self.client.setHue(event.options.hue).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -179,17 +191,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'hue',
 					label: 'Change Hue by',
-					min: -255,
-					max: 255,
+					min: -self.MAX_HUE,
+					max: self.MAX_HUE,
 					default: 10,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
-				self.client.incrementHue(event.options.hue).then(res => {
-					console.log(res)
+				self.client.increaseHue(event.options.hue).then(res => {
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -201,17 +213,17 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'temperature',
 					label: 'Color Temperature',
-					min: 2000,
-					max: 8000,
-					default: 3500,
+					min: self.MIN_CT,
+					max: self.MAX_CT,
+					default: (self.MAX_CT + self.MIN_CT)/2,
 					step: 1,
 				}
 			],
 			callback: async (event) => {
 				self.client.setColorTemperature(event.options.temperature).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -230,9 +242,9 @@ module.exports = function (self) {
 			],
 			callback: async (event) => {
 				self.client.incrementColorTemperature(event.options.temperature).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -249,9 +261,9 @@ module.exports = function (self) {
 			],
 			callback: async (event) => {
 				self.client.setEffect(event.options.effect).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -267,12 +279,15 @@ module.exports = function (self) {
 				},
 			],
 			callback: async (event) => {
-				console.log('event', JSON.stringify(event))
-				console.log('color', event.options.color)
 				var r = (event.options.color>>16)%256
 				var g = (event.options.color>> 8)%256
 				var b = (event.options.color    )%256
-				self.client.setRgbColor(r, g, b)
+				self.client.setRgbColor(r, g, b).then(res => {
+					self.log('debug', JSON.stringify(res))
+				}).catch(err => {
+					self.log("error",JSON.stringify(err))
+				})
+					
 			}
 		},
 		setHsvColor: {
@@ -282,8 +297,8 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'hue',
 					label: 'Hue',
-					min: 0,
-					max: 359,
+					min: self.MIN_HUE,
+					max: self.MAX_HUE,
 					default: 120,
 					step: 1,
 				},
@@ -291,8 +306,8 @@ module.exports = function (self) {
 					type: 'number',
 					id: 'saturation',
 					label: 'Saturation',
-					min: 0,
-					max: 100,
+					min: self.MIN_SATURATION,
+					max: self.MAX_SATURATION,
 					default: 100,
 					step: 1,
 				},
@@ -312,9 +327,9 @@ module.exports = function (self) {
 					event.options.saturation,
 					event.options.value
 				).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
@@ -355,15 +370,11 @@ module.exports = function (self) {
 					event.options.saturation,
 					event.options.lightness
 				).then(res => {
-					console.log(res)
+					self.log('debug', JSON.stringify(res))
 				}).catch(err => {
-					self.log("error",err)
+					self.log("error",JSON.stringify(err))
 				})
 			},
 		},
-
-
-
-				
 	})
 }

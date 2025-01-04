@@ -13,7 +13,8 @@
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.11.2",
-		"nanoleaf-client": "^0.2.2"
+		"nanoleaf-client": "^0.2.2",
+		"nanoleaf-client-multi": "^3.0.1"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.1.1",
