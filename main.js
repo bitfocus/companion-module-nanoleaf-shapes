@@ -151,6 +151,12 @@ class ModuleInstance extends InstanceBase {
 	getConfigFields() {
 		return [
 			{
+				type: 'static-text',
+				id: 'label',
+				label: 'First connection',
+				value: 'When setting up a new connection, save the IP address and then hold the power button on your nanoleaf device for 5 seconds until the white LED starts glowing',
+			},
+			{
 				type: 'textinput',
 				id: 'ip',
 				label: 'Device IP',
