@@ -1,4 +1,4 @@
-import EventSource from 'eventsource';
+import {EventSource} from 'eventsource';
 import c from './const.mjs';
 
 /**
