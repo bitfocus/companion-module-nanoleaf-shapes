@@ -1,5 +1,5 @@
 {
-	"id": "companion-module-nanoleaf-shapes",
+	"id": "nanoleaf-shapes",
 	"name": "companion-module-nanoleaf-shapes",
 	"shortname": "nanoleaf-shapes",
 	"description": "Control Nanoleaf Shapes and compatible modules",
