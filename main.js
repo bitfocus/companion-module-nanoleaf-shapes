@@ -54,13 +54,18 @@ class ModuleInstance extends InstanceBase {
 	}
 
 	async reconnect() {
+		if (!this.config.ip) {
+			this.updateStatus(InstanceStatus.BadConfig, 'No IP address configured - please find your Nanoleaf device\'s IP address and enter it in the module configuration.')
+			return
+		}
+
 		if (this.config.token != undefined) {
 			this.client = new NanoleafClient(this.config.ip, this.config.token)
 			this.updateStatus(InstanceStatus.Ok)
 			await this.initPolling()
 			this.setPresetDefinitions(getPresetDefinitions(this))
 		} else {
-			this.updateStatus(InstanceStatus.Connecting, "Long-press the NanoLeaf's power button")
+			this.updateStatus(InstanceStatus.Connecting, "Long-press the NanoLeaf's power button for 5 seconds after turning device on.")
 			this.client = new NanoleafClient(this.config.ip)
 			let self = this;
 			(async function x() {
@@ -71,9 +76,9 @@ class ModuleInstance extends InstanceBase {
 						self.saveConfig(self.config)
 						self.log("info", "Received new token")
 						self.updateStatus(InstanceStatus.Ok)
-						self.client.identify()
+						await self.client.identify().catch((e) => self.log('debug', `identify failed: ${e}`))
 						await self.initPolling()
-						this.setPresetDefinitions(getPresetDefinitions(this))
+						self.setPresetDefinitions(getPresetDefinitions(self))
 						break
 					} catch (error) {
 						self.log("info", "Connection failed, retrying in 5 seconds. Long-press the power button of your device to connect.")
@@ -154,7 +159,7 @@ class ModuleInstance extends InstanceBase {
 				type: 'static-text',
 				id: 'label',
 				label: 'First connection',
-				value: 'When setting up a new connection, save the IP address and then hold the power button on your nanoleaf device for 5 seconds until the white LED starts glowing',
+				value: 'When setting up a new connection, enter the IP address, save the config, and then turn on your Nanoleaf device. Long-press the power button for 5 seconds until the white LED starts glowing.',
 			},
 			{
 				type: 'textinput',
